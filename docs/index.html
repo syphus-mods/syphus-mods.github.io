@@ -42,7 +42,7 @@
               <p>
                 I've been active in the Demoscene for many years under the name syphus, though occasionally going by silo7, 
                 lightbomb, echolevel, and joey&splif.
-                 
+                
                 I'm a member of the demogroups <a href="https://www.uprough.net/">Up Rough</a> and Space Raiders, and I've been in BDSE, CpH and some others over the years. I'm not as active in the scene as I used to be, but 
                 occasionally I still find the time to write a tune or collaborate on a production. 
                 If you need to get in touch hit up <a href="https://echolevel.co.uk">echolevel.co.uk</a>, or my <a href="https://www.instagram.com/echolevel/">instagram</a> where I often post demoscene/chiptune-related stuff.
@@ -108,32 +108,47 @@
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
     }
 
+    function isIterable(obj) {
+    // checks for null and undefined
+      if (obj == null) {
+        return false;
+      }
+      return typeof obj[Symbol.iterator] === 'function';
+    }
+
     // Render search result list
     const updateList = (data, ) => {
-        let htmlString = '';
-        let zipString = '';
-        let modCount = 0;
-        for (let file of data) {
-          console.log(file);    
-          var size = formatBytes(file.size, 1);
-          
-          if(file.name == "mods.zip")
-          {
-            zipString += ` (${size}) <a href="${file.download_url}"> ${file.name}</a>`;
-          }
-          else{            
-            htmlString += `<a href="${file.download_url}">${file.name}</a>  ${size} <br/>`;
-            modCount++;
-          }
-          
-        }        
-        document.getElementById('zip').innerHTML = `Download all ${modCount} songs in a zipfile` + zipString;
-        document.getElementById('list').innerHTML = htmlString;
+        if(isIterable(data)) {
+          let htmlString = '';
+          let zipString = '';
+          let modCount = 0;
+          for (let file of data) {
+            console.log(file);    
+            var size = formatBytes(file.size, 1);
+            
+            if(file.name == "mods.zip")
+            {
+              zipString += ` (${size}) <a href="${file.download_url}"> ${file.name}</a>`;
+            }
+            else{            
+              htmlString += `<a href="${file.download_url}">${file.name}</a>  ${size} <br/>`;
+              modCount++;
+            }
+            
+          }        
+          document.getElementById('zip').innerHTML = `Download all ${modCount} songs in a zipfile` + zipString;
+          document.getElementById('list').innerHTML = htmlString;
+        }
+        else{
+          document.getElementById('zip').innerHTML = `Couldn't display the modules from github - maybe your IP has hit its rate-limit for the day?
+          <br/>You can download individual mods, or a zip of all the songs, <a href="https://github.com/syphus-mods/syphus-mods.github.io/tree/main/mods">here.</a>`;
+        }
+        
       }
 
     (async () => {
         // Get GitHub repository file info
-        const response = await fetch('https://api.github.com/repos/syphus-mods/contents/mods');
+        const response = await fetch('https://api.github.com/repos/syphus-mods/syphus-mods.github.io/contents/mods');
         const data = await response.json();        
         updateList(data);
         
