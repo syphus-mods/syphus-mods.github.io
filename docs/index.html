@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"
+      type="image/ico"
+      href="favicon.ico">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>echolevel</title>
+  </head>
+
+  <body>
+
+    <div class="wrap">
+      <div class="innerwrap">
+
+        <div class="container">
+
+          <div class="section">
+            
+            <p class="pre-centered">
+              <pre>
+             .
+            - -
+             |                                                                |
+         o                                                                   -.-
+                                                                    *         |  
+                   ____________ ____________________________________           o
+              <<  /         \  Y    /      \   /   /   /  /         \
+                  \         /      /    /  /      /   /   \         /            O
+                  /\      \/\     /       /      /       / \      \/              .
+                 /         \/    /    ___/      /       /          \
+      O          \_________/    /    / \___/___/\______/\__________/  >>
+.                         \____/\___/                                           |
+                                                          uP ROUGH             -*-
+                                                                                |
+              </pre>
+            </p>
+
+            <div id="scroller">
+              <p>
+                I've been active in the Demoscene for many years under the name syphus, though occasionally going by silo7, 
+                lightbomb, echolevel, and joey&splif.
+                
+                I'm a member of the demogroups <a href="https://www.uprough.net/">Up Rough</a> and Space Raiders, and I've been in BDSE, CpH and some others over the years. I'm not as active in the scene as I used to be, but 
+                occasionally I still find the time to write a tune or collaborate on a production. 
+                If you need to get in touch hit up <a href="https://echolevel.co.uk">echolevel.co.uk</a>, or my <a href="https://www.instagram.com/echolevel/">instagram</a> where I often post demoscene/chiptune-related stuff.
+                <br/>
+                <br/>
+                Here are most of my finished modules from the past few decades. ModLand and AMP have a bunch of unfinished 
+                and/or broken mods of mine - no idea how they ended up there and I wish they hadn't, but I've never been 
+                able to get them taken down. Oh well. So these ones are 'official', I guess.
+  
+                When I get time I'd like to put them all on YouTube so they're easier to listen to. Meanwhile:
+                <br/><br/>
+                For Amiga 4-channel MOD files, use <a href="https://16-bits.org/pt2.php">8bitbubsy's ProTracker 2 clone</a>. 
+                <br/>
+                For FastTracker XM files, use <a href="https://16-bits.org/ft2.php">8bitbubsy's Fasttracker II clone</a>.
+                <br/>
+                For Impulse Tracker IT files, use <a href="https://schismtracker.org/">Schism Tracker</a>.
+                <br/>
+                For AHX and HVL, use <a href="http://www.hivelytracker.co.uk/">Xeron's HivelyTracker</a>.
+                <br/>
+                On Windows, <a href="https://www.un4seen.com/">XMPlay</a> is a handy multiformat WinAmp-style player (though MODs with >64kb samples crash it)
+                <br/>
+                On original hardware, you probably already know what you're doing :) 8bitbubsy's latest PT2.3F is necessary for recent mods with >64kb samples, and he's also done a very nice bugfix version of Fasttracker 2!              
+                <br/>
+  
+                
+              </p>
+              
+              <p id="zip">
+                
+              </p>
+  
+              <div id="list">
+  
+              </div>
+  
+              <br/><br/>
+            </div>
+            
+            
+          </div>
+
+
+          <div class="footer-bar">
+            &copy; brendan o'callaghan ratliff 2023
+          </div>
+
+
+        </div><!-- container end -->
+      </div><!--inner-wrap end -->
+    </div><!--wrap end -->
+
+  <script type="text/javascript">
+    
+    function formatBytes(bytes, decimals = 2) {
+    if (!+bytes) return '0 Bytes'
+
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['B', 'KB', 'MB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+    }
+
+    // Render search result list
+    const updateList = (data, ) => {
+        let htmlString = '';
+        let zipString = '';
+        let modCount = 0;
+        for (let file of data) {
+          console.log(file);    
+          var size = formatBytes(file.size, 1);
+          
+          if(file.name == "mods.zip")
+          {
+            zipString += ` (${size}) <a href="${file.download_url}"> ${file.name}</a>`;
+          }
+          else{            
+            htmlString += `<a href="${file.download_url}">${file.name}</a>  ${size} <br/>`;
+            modCount++;
+          }
+          
+        }        
+        document.getElementById('zip').innerHTML = `Download all ${modCount} songs in a zipfile` + zipString;
+        document.getElementById('list').innerHTML = htmlString;
+      }
+
+    (async () => {
+        // Get GitHub repository file info
+        const response = await fetch('https://api.github.com/repos/echolevel/syphus/contents/mods');
+        const data = await response.json();        
+        updateList(data);
+        
+      })()
+      
+
+  </script>
+
+  </body>
+
+</html>
